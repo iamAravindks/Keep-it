@@ -1,0 +1,38 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-color: #212121;
+}
+
+.kit-single-note{
+  display: flex;
+  flex-direction: column;
+  word-break: break-all;
+  height: auto;
+  padding: 10px 20px;
+  text-align: justify;
+  
+}
+
+.kit-single-note img{
+  width: 200px;
+  height: 200px;
+  
+}
+.kit-readmore{
+  position: absolute;
+  color: #eee;
+  bottom: 0;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  height: 50px;
+  border: none;
+cursor: pointer;
+font-size: 15px;
+background-color: #212121;
+}
