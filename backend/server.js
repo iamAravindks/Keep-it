@@ -1,9 +1,12 @@
 import express from 'express'
 import cors from 'cors'
 import cookieParser from "cookie-parser"
-
 import config from './config.js'
 import connectDB from "./config/db.js"
+import userRouter from "./routes/userRouter.js";
+
+import { errorHandler, notFound } from "./middlewares/errorHandler.js";
+
 
 const { PORT } = config
 const app = express()
@@ -16,6 +19,12 @@ app.use(
     extended: true,
   })
 );
+
+app.use("/api/users", userRouter);
+
+
+app.use(notFound);
+app.use(errorHandler);
 
 connectDB()
 
