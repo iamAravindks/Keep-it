@@ -21,7 +21,7 @@ const TOOLBAR_OPTIONS = [
 const Title = styled(TextField)(({ theme }) => ({
     
 }))
-const Editor = ({ data, setData }) => {
+const Editor = ({ data, setData, handleTitle }) => {
   const [quil, setQuil] = useState(null);
 
   useEffect(() => {
@@ -29,7 +29,13 @@ const Editor = ({ data, setData }) => {
     const handler = (delta, oldDelta, source) => {
       if (source !== "user") return;
       else {
-          setData(quil.editor.scroll.domNode.innerHTML);
+        setData(prevState =>
+        {
+          return {
+            ...prevState,
+            content: quil.editor.scroll.domNode.innerHTML,
+          };
+        });
 
         console.log(quil.editor.scroll.domNode.innerHTML);
         //   console.log(quil.getContents());
@@ -52,14 +58,14 @@ const Editor = ({ data, setData }) => {
       modules: { toolbar: TOOLBAR_OPTIONS },
     });
     setQuil(q);
-    q.editor.scroll.domNode.innerHTML = data;
+    q.editor.scroll.domNode.innerHTML = data?.content;
   }, []);
-    return (
-      <>
-        <Title fullWidth label="Title" id="fullWidth" />
-        <div className="container" ref={wrapperRef}></div>
-      </>
-    );
+  return (
+    <>
+      <Title fullWidth label="Title" id="fullWidth" value={data?.title} onChange={handleTitle} />
+      <div className="container" ref={wrapperRef}></div>
+    </>
+  );
 };
 
 export default Editor;

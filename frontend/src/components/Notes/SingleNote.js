@@ -64,15 +64,15 @@ const SingleNote = ({ id ,title, content }) =>
         position: "relative",
         padding: "2px",
         border: "2px solid #424242",
+        backgroundColor: "#bdbdbd",
       }}
     >
-      <Typography variant="h5" gutterBottom color={"white"} padding={"10px"}>
+      <Typography variant="h5" gutterBottom color={"#212121"} padding={"10px"}>
         {title}
       </Typography>
       <Divider />
       <div className="kit-single-note" ref={noteRef}></div>
       {overflow && <button className="kit-readmore">Read more</button>}
-      
     </SingleNoteGrid>
   );
 };

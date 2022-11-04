@@ -2,8 +2,9 @@ import styled from "@emotion/styled";
 import { Grid, Modal, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import Button from "@mui/material/Button";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Editor from "./Editor";
+import { KeepContext } from "../../Context/KeepContext";
 
 const WrapperGrid = styled(Grid)(({ theme }) => ({
   // backgroundColor: "red",
@@ -20,8 +21,8 @@ const SaveContainer = styled(Grid)(({ theme }) => ({
   alignItems: "center",
   marginTop: "5px",
   // backgroundColor: "green",
-  height:"50px"
-}))
+  height: "50px",
+}));
 
 const style = {
   position: "absolute",
@@ -40,9 +41,28 @@ const TextBox = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const ipRef = useRef(null);
-  const [data, setData] = useState('<strong>hai</strong>');
 
-  
+  const { addNote } = useContext(KeepContext);
+
+  const [data, setData] = useState({
+    title: "",
+    content: "",
+  });
+
+  const handleTitle = (e) =>
+    setData((prevState) => {
+      return { ...prevState, title: e.target.value };
+    });
+
+  const handleOnClick = () => {
+    if (data.content.length <= 0) return;
+    addNote(data.title, data.content);
+    handleClose();
+    setData({
+      title: "",
+      content: "",
+    });
+  };
 
   return (
     <WrapperGrid container>
@@ -53,7 +73,6 @@ const TextBox = () => {
           placeholder="Take a note"
           onClick={handleOpen}
           ref={ipRef}
-          
           style={{
             background: "#424242",
           }}
@@ -72,10 +91,12 @@ const TextBox = () => {
               height: "90%",
             }}
           >
-            <Editor data={data} setData={setData} />
+            <Editor data={data} setData={setData} handleTitle={handleTitle} />
           </Grid>
           <SaveContainer item style={{ justifyContent: "center" }} xs={12}>
-            <Button variant="contained">Add to keep</Button>
+            <Button variant="contained" onClick={handleOnClick}>
+              Add to keep
+            </Button>
           </SaveContainer>
         </Box>
       </Modal>
