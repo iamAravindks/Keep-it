@@ -1,37 +1,49 @@
-import styled from "@emotion/styled";
-import { Divider, Grid } from "@mui/material";
+import {
+  BrowserRouter as Router,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { Container } from "@mui/system";
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import Home from "./components/Home/Home";
 import NavBar from "./components/Navbar/NavBar";
-import AllNotes from "./components/Notes/AllNotes";
-import TextBox from "./components/TextEditor/TextBox";
+import Login from "./components/Login/Login";
+import PrivateRouteWrapper from "./components/privateRouteWrapper";
+import { KeepContext } from "./Context/KeepContext";
 
 
-const GridContainer = styled(Grid)(({ theme }) => ({
-  // backgroundColor: "#424242",
-  minHeight: "90vh",
-  margin:0,
-  marginTop: "30px",
-  
-  
-}));
-const App = () => {
+
+
+const Layout = () =>
+{
   return (
-    <div>
+    <>
       <NavBar />
+      <Outlet/>
+    </>
+  )
+}
+
+const App = () =>
+{
+  
+
+  return (
+    <>
       <Container>
-        <GridContainer
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          padding={2}
-        >
-          <TextBox />
-          <Divider/>
-          <AllNotes/>
-        </GridContainer>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route element={<PrivateRouteWrapper />}>
+                <Route index element={<Home />} />
+              </Route>
+            </Route>
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Router>
       </Container>
-    </div>
+    </>
   );
 };
 
