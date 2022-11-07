@@ -13,6 +13,7 @@ import PrivateRouteWrapper from "./components/privateRouteWrapper";
 import { KeepContext } from "./Context/KeepContext";
 import { SignUp } from "./components/Signup/SignUp";
 import Profile from "./components/Profile/Profile";
+import Loader from "./components/Loader";
 
 
 
@@ -34,6 +35,7 @@ const App = () =>
   return (
     <>
       <Container>
+       
         <Router>
           <Routes>
             <Route path="/" element={<Layout />}>
