@@ -5,7 +5,9 @@
   "main": "backend/server.js",
   "type": "module",
   "scripts": {
-    "dev":"nodemon backend/server.js"
+    "dev":"nodemon backend/server.js",
+      "data:import": "node backend/seeder.js",
+      "data:destroy": "node backend/seeder.js -d"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

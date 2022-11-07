@@ -73,7 +73,8 @@ userRouter.post(
       password,
     });
 
-    if (user) {
+    if (user)
+    {
       const maxAge = 3 * 24 * 60 * 60;
       const token = generateToken(user._id);
       res.cookie("access_token", token, {

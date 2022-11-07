@@ -6,6 +6,7 @@ import connectDB from "./config/db.js"
 import userRouter from "./routes/userRouter.js";
 
 import { errorHandler, notFound } from "./middlewares/errorHandler.js";
+import noteRouter from "./routes/noteRouter.js"
 
 
 const { PORT } = config
@@ -21,6 +22,7 @@ app.use(
 );
 
 app.use("/api/users", userRouter);
+app.use("/api/notes",noteRouter)
 
 
 app.use(notFound);
