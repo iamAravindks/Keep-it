@@ -71,7 +71,7 @@ const HeaderBar = styled(AppBar)(({ theme }) => ({
 export default function Header({ anchor, toggleDrawer }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <HeaderBar position="static">
+      <HeaderBar position="fixed">
         <Toolbar>
           <IconButton
             size="large"

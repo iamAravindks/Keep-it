@@ -12,6 +12,7 @@ import Login from "./components/Login/Login";
 import PrivateRouteWrapper from "./components/privateRouteWrapper";
 import { KeepContext } from "./Context/KeepContext";
 import { SignUp } from "./components/Signup/SignUp";
+import Profile from "./components/Profile/Profile";
 
 
 
@@ -38,6 +39,7 @@ const App = () =>
             <Route path="/" element={<Layout />}>
               <Route element={<PrivateRouteWrapper />}>
                 <Route index element={<Home />} />
+                <Route path="/profile" element={<Profile/>}/>
               </Route>
             </Route>
             <Route path="/login" element={<Login />} />

@@ -47,6 +47,7 @@ const Form = styled("form")(({ theme }) => ({
   justifyContent: "center",
   padding: "2rem",
   flexDirection: "column",
+  
 }));
 
 const EmailText = styled(TextField)(({ theme }) => ({}));

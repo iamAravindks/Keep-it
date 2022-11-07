@@ -46,6 +46,7 @@ userRouter.get(
       res.json({
         _id: user._id,
         email: user.email,
+        name:user.name
       });
     } else {
       res.status(404);
@@ -211,5 +212,19 @@ userRouter.patch(
     });
   })
 );
-
+userRouter.get(
+  "/logout",
+  expressAsyncHandler(async (req, res) => {
+    const maxAge = 0;
+    const token = generateToken("6781235678", "logout");
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      maxAge: maxAge,
+    });
+    res.json({
+      message: "successfully logout in",
+     
+    });
+  })
+);
 export default userRouter;

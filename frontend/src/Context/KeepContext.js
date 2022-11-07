@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import axios from "axios";
 import KeepContextReducer from "./KeepContextReducer";
 import { mockNotes } from "../constants/mockdata";
-import { ADD_NOTE, USER_LOGIN, USER_SIGNUP } from "./Types";
+import { ADD_NOTE, USER_LOGIN, USER_LOGOUT, USER_PROFILE, USER_PROFILE_UPDATE, USER_SIGNUP } from "./Types";
 
 const initialState = {
   data: mockNotes,
@@ -90,6 +90,70 @@ const KeepContextProvider = ({ children }) => {
     }
   };
 
+  const getProfile = async () =>
+  {
+    try {
+      
+      const { data } = await axios.get("/api/users/profile", config)
+      dispatch({
+        type: USER_PROFILE,
+        payload: {
+          name: data.name,
+          email:data.email
+        }
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  // update profile
+
+   const updateProfile = async (email, password, name) => {
+     try {
+       const { data } = await axios.put(
+         "/api/users/profile",
+         { email, password, name },
+         config
+       );
+
+       dispatch({
+         type: USER_PROFILE_UPDATE,
+         payload: {
+           name: data?.name,
+           email: data?.email,
+         },
+       });
+
+       localStorage.setItem(
+         "keepUserInfo",
+         JSON.stringify({
+           name: data?.name,
+           email: data?.email,
+         })
+       );
+     } catch (error) {
+       console.log(error);
+     }
+   };
+
+  // logout 
+
+    const logout = async () => {
+      try {
+        // dispatch({ type: REQUEST });
+        const { data } = await axios.get("/api/users/logout", config);
+        
+          dispatch({
+            type: USER_LOGOUT,
+          });
+          localStorage.removeItem("keepUserInfo");
+      } catch (error) {
+        console.log("error")
+      }
+    };
+
   return (
     <KeepContext.Provider
       value={{
@@ -98,6 +162,9 @@ const KeepContextProvider = ({ children }) => {
         addNote,
         login,
         signUp,
+        logout,
+        getProfile,
+        updateProfile,
       }}
     >
       {children}
