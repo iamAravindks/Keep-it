@@ -11,6 +11,7 @@ import NavBar from "./components/Navbar/NavBar";
 import Login from "./components/Login/Login";
 import PrivateRouteWrapper from "./components/privateRouteWrapper";
 import { KeepContext } from "./Context/KeepContext";
+import { SignUp } from "./components/Signup/SignUp";
 
 
 
@@ -40,6 +41,7 @@ const App = () =>
               </Route>
             </Route>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
           </Routes>
         </Router>
       </Container>

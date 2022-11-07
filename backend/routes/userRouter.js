@@ -59,7 +59,7 @@ userRouter.get(
 // @access Public
 
 userRouter.post(
-  "/",
+  "/signup",
   expressAsyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
     const userExists = await User.findOne({ email });
