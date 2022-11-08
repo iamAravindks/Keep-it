@@ -9,6 +9,7 @@ import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { KeepContext } from "../../Context/KeepContext";
+import { Link } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -103,7 +104,9 @@ export default function Header({ anchor, toggleDrawer })
               marginTop: "5px",
             }}
           >
-            Keep-It💡
+            <Link to="/" style={{ textDecoration: "none",color:"#eee" }}>
+              Keep-It💡
+            </Link>
           </Typography>
 
           <Search>

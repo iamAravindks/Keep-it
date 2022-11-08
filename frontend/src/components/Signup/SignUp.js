@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { KeepContext } from "../../Context/KeepContext";
 import { BodyLogin } from "../Login/LoginStyles";
 import { validateEmail } from "../utils/util";
@@ -98,6 +98,11 @@ export const SignUp = () => {
             handleOnSubmit={handleOnSubmit}
           />
         </BodyLogin>
+        <Typography align="center" color={"primary"}>
+          <Link to={"/login"} style={{ textDecoration: "none" }}>
+            Login
+          </Link>
+        </Typography>
       </SignUpGrid>
     </SignUpContainer>
   );
