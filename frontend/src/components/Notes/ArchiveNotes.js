@@ -1,25 +1,26 @@
 import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from "react";
 import { KeepContext } from "../../Context/KeepContext";
-import SingleNote from './SingleNote'
-
+import SingleNote from "./SingleNote";
 
 const GridContainer = styled(Grid)(({ theme }) => ({
-    
-    padding: "3rem",
-    justifyContent:"center"
-}))
+  padding: "3rem",
+  justifyContent: "center",
+  // backgroundColor: "red",
+  display: "flex",
+  //   minHeight:"90vh"
+  marginTop: "200px",
+}));
 
-const AllNotes = () =>
-{
-  
+const ArchiveNotes = () => {
   const { data, updateNote } = useContext(KeepContext);
-  // console.log(data)
+
   return (
     <GridContainer container spacing={2} columnGap={3} rowGap={2}>
+      {/* Notes */}
       {data.map((note) => {
-        if (note.archive) return <></>;
+        if (note.archive === false) return <></>;
         return (
           <SingleNote
             key={note._id}
@@ -33,6 +34,6 @@ const AllNotes = () =>
       })}
     </GridContainer>
   );
-}
+};
 
-export default AllNotes
+export default ArchiveNotes;

@@ -82,17 +82,17 @@ noteRouter.put(
   expressAsyncHandler(async (req, res) => {
     try
     {
-      console.log(req.body)
+      console.log(req.body.archive)
       const existedNote = await Notes.find(
         {
-          user: req.user._id,
-          "notes._id": req.params.id,
+          user: mongoose.Types.ObjectId(req.user._id),
+          "notes._id": mongoose.Types.ObjectId(req.params.id),
         },
         {
           "notes.$": 1,
         }
       );
-
+console.log(existedNote[0].notes)
       if (!existedNote) {
         res.json({
           message: "No note found",
@@ -102,20 +102,21 @@ noteRouter.put(
 
       const updatedNotes = await Notes.updateOne(
         {
-          user: req.user._id,
-          "notes._id": req.params.id,
+          user: mongoose.Types.ObjectId(req.user._id),
+          "notes._id": mongoose.Types.ObjectId(req.params.id),
         },
         {
           $set: {
             "notes.$.title": req.body.title || existedNote[0].notes.title,
             "notes.$.content": req.body.content || existedNote[0].notes.content,
-            "notes.$.archive": req.body.archive || existedNote[0].notes.archive,
+            "notes.$.archive": req.body.archive!==undefined ? req.body.archive: existedNote[0].notes.archive,
           },
         },
         { new: true }
       );
 
       const notes = await Notes.findOne({ user: req.user._id });
+
 
       if (updatedNotes) {
         res.json({

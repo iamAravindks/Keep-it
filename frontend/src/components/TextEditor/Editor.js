@@ -37,7 +37,6 @@ const Editor = ({ data, setData, handleTitle }) => {
           };
         });
 
-        console.log(quil.editor.scroll.domNode.innerHTML);
         //   console.log(quil.getContents());
       }
     };

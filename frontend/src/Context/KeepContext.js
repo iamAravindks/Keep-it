@@ -29,23 +29,22 @@ const KeepContextProvider = ({ children }) => {
   const [userState, dispatch] = useReducer(KeepContextReducer, initialState);
 
   const addNote = async (title, content) => {
-   try {
-     dispatch({ type: REQUEST })
+    try {
+      dispatch({ type: REQUEST });
       const newNote = {
         title,
         content,
       };
-     
-     const { data } = await axios.post("/api/notes/new-note", newNote, config)
-     
-     dispatch({
-       type: GET_NOTES,
-       payload:data.data
-      })
-     
-   } catch (error) {
-    console.log(error.message)
-   }
+
+      const { data } = await axios.post("/api/notes/new-note", newNote, config);
+
+      dispatch({
+        type: GET_NOTES,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   // user login
@@ -205,9 +204,8 @@ const KeepContextProvider = ({ children }) => {
   // update a note
 
   const updateNote = async (id, { title, content, archive }) => {
-    try
-    {
-      dispatch({type:REQUEST})
+    try {
+      dispatch({ type: REQUEST });
       const { data } = await axios.put(
         `/api/notes/note/${id}`,
         {
@@ -218,33 +216,46 @@ const KeepContextProvider = ({ children }) => {
         config
       );
 
-          dispatch({
-            type: GET_NOTES,
-            payload: data.data,
-          });
-    } catch (error)
-    {
-      console.log(error.message)
+      console.log(data);
+      dispatch({
+        type: GET_NOTES,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.message);
     }
   };
-
 
   const deleteNote = async (id) => {
     try {
       dispatch({
-        type:REQUEST
-      })
+        type: REQUEST,
+      });
 
-      const { data } = await axios.delete(`/api/notes/del-note/${ id }`, config)
-       dispatch({
-         type: GET_NOTES,
-         payload: data.data,
-       });
-      
+      const { data } = await axios.delete(`/api/notes/del-note/${id}`, config);
+      dispatch({
+        type: GET_NOTES,
+        payload: data.data,
+      });
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-  }
+  };
+
+  const searchNote = (note) =>
+  {
+    if (note.length === 0)
+    {
+      getNotes()
+      return
+    }
+    const filterDatas = userState.data.filter((n) => n.title.includes(note));
+
+    dispatch({
+      type: GET_NOTES,
+      payload: filterDatas,
+    });
+  };
   return (
     <KeepContext.Provider
       value={{
@@ -260,6 +271,7 @@ const KeepContextProvider = ({ children }) => {
         getNotes,
         updateNote,
         deleteNote,
+        searchNote
       }}
     >
       {children}

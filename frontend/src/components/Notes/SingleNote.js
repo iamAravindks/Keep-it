@@ -14,22 +14,14 @@ import {
   Modal,
   Typography,
 } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import Editor from "../TextEditor/Editor";
 import { KeepContext } from "../../Context/KeepContext";
-
-const SingleNoteGrid = styled(Grid)(({ theme }) => ({
-  background: "#212121",
-  maxHeight: "400px",
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.black, 0.25),
-    cursor: "pointer",
-  },
-  transition: theme.transitions.create("background"),
-}));
+import { SaveContainer, SingleNoteGrid } from "./NoteStyles";
+import { isOverflown } from "../utils/util";
 
 const style = {
   position: "absolute",
@@ -44,34 +36,28 @@ const style = {
   height: 500,
 };
 
-const SaveContainer = styled(Grid)(({ theme }) => ({
-  // marginLeft:"auto"
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  marginTop: "5px",
-  // backgroundColor: "green",
-  height: "50px",
-}));
 
-function isOverflown(element) {
-  return (
-    element.scrollHeight > element.clientHeight ||
-    element.scrollWidth > element.clientWidth
-  );
-}
+
 
 const SingleNote = ({ id, title, content, archive }) => {
   const { updateNote, deleteNote } = useContext(KeepContext);
   const [overflow, setOverflow] = useState(false);
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState({});
 
   const singleGridRef = useRef(null);
+
+  useEffect(() => {
+    setData({
+      title,
+      content,
+    });
+  }, []);
 
   const noteRef = useCallback((contentSec) => {
     if (contentSec === null || singleGridRef === null) return;
     contentSec.innerHTML = content;
-  }, []);
+  }, [content]);
 
   useEffect(() => {
     if (singleGridRef === null) return;
@@ -79,36 +65,26 @@ const SingleNote = ({ id, title, content, archive }) => {
     setOverflow(isOverflown(singleGridRef.current));
   }, [content, overflow]);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const [data, setData] = useState({
-    title,
-    content,
-    archive,
-  });
 
   const handleTitle = (e) =>
     setData((prevState) => {
       return { ...prevState, title: e.target.value };
     });
 
-  const handleArchive = () => {
-    console.log(archive);
-    setData((prevState) => {
-      return { ...prevState, archive: !prevState.archive };
-    });
-    updateNote(id, data);
-  };
+  
+  const handleArchive = useCallback(() =>
+  {
+    console.log("before" + {...data});
+    updateNote(id,{...data,archive:!archive})
+    console.log("after"+{...data})
+    // updateNote(id, data);
+  },[archive])
+
 
   const handleOnClick = () => {
     if (data.content.length <= 0) return;
-    handleClose();
+    setOpen(false)
     updateNote(id, { title: data.title, content: data.content, archive });
   };
   return (
@@ -132,7 +108,7 @@ const SingleNote = ({ id, title, content, archive }) => {
           color="inherit"
           aria-label="open drawer"
           sx={{ ml: 1 }}
-          onClick={handleOpen}
+          onClick={()=>setOpen(true)}
         >
           <EditIcon />
         </IconButton>
@@ -142,7 +118,7 @@ const SingleNote = ({ id, title, content, archive }) => {
           color="inherit"
           aria-label="open drawer"
           sx={{ ml: 1 }}
-          style={{ color: data.archive === true ? "white" : "black " }}
+          style={{ color: archive === true ? "white" : "black " }}
           onClick={handleArchive}
         >
           <ArchiveIcon />
@@ -159,14 +135,14 @@ const SingleNote = ({ id, title, content, archive }) => {
         </IconButton>
       </Grid>
       <Typography variant="h5" gutterBottom color={"#212121"} padding={"10px"}>
-        {title}
+        {data.title}
       </Typography>
       <Divider />
       <div className="kit-single-note" ref={noteRef}></div>
       {overflow && <button className="kit-readmore">Read more</button>}
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={()=>setOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

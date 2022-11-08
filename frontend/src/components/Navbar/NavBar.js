@@ -52,7 +52,7 @@ const NavBar = () => {
           "Profile 👤",
           "Logout ➡️",
         ].map((text, index) => {
-          if (index===4) {
+          if (index === 4) {
             return (
               <ListItem key={text}>
                 <ListItemButton onClick={() => logout()}>
@@ -61,16 +61,33 @@ const NavBar = () => {
                 <Divider />
               </ListItem>
             );
-          } else if (index === 3)
-          {
-             return (
-               <ListItem key={text}>
-                 <ListItemButton onClick={() => navigate("profile")}>
-                   <ListItemText primary={text} />
-                 </ListItemButton>
-                 <Divider />
-               </ListItem>
-             );
+          } else if (index === 3) {
+            return (
+              <ListItem key={text}>
+                <ListItemButton onClick={() => navigate("profile")}>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+                <Divider />
+              </ListItem>
+            );
+          } else if (index === 2) {
+            return (
+              <ListItem key={text}>
+                <ListItemButton onClick={() => navigate("archive")}>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+                <Divider />
+              </ListItem>
+            );
+          } else if (index === 0) {
+            return (
+              <ListItem key={text}>
+                <ListItemButton onClick={() => navigate("/")}>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+                <Divider />
+              </ListItem>
+            );
           }
 
           return (

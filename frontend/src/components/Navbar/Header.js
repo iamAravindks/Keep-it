@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import { KeepContext } from "../../Context/KeepContext";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -68,7 +69,15 @@ const HeaderBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: "#212121",
 }));
 
-export default function Header({ anchor, toggleDrawer }) {
+export default function Header({ anchor, toggleDrawer })
+{
+  const {searchNote} = React.useContext(KeepContext)
+  const [searchTerm, setSearchTerm] = React.useState("")
+  const handleSearch = (e) =>
+  {
+    setSearchTerm(e.target.value)
+    searchNote(e.target.value)
+}
   return (
     <Box sx={{ flexGrow: 1 }}>
       <HeaderBar position="fixed">
@@ -104,6 +113,8 @@ export default function Header({ anchor, toggleDrawer }) {
             <StyledInputBase
               placeholder="Search note"
               inputProps={{ "aria-label": "search" }}
+              value={searchTerm}
+              onChange={handleSearch}
             />
           </Search>
         </Toolbar>
