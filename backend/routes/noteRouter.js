@@ -80,7 +80,9 @@ noteRouter.put(
   "/note/:id",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    try {
+    try
+    {
+      console.log(req.body)
       const existedNote = await Notes.find(
         {
           user: req.user._id,
@@ -117,7 +119,7 @@ noteRouter.put(
 
       if (updatedNotes) {
         res.json({
-          data: notes,
+          data: notes.notes,
         });
       }
     } catch (error) {

@@ -30,10 +30,13 @@ const Layout = () =>
 
 const App = () =>
 {
+
+
   
 
   return (
     <>
+      <Loader/>
       <Container>
        
         <Router>

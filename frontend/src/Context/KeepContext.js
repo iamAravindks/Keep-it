@@ -1,14 +1,21 @@
 import { createContext, useReducer } from "react";
-import { v4 as uuid } from "uuid";
 import axios from "axios";
 import KeepContextReducer from "./KeepContextReducer";
-import { mockNotes } from "../constants/mockdata";
-import { ADD_NOTE, USER_LOGIN, USER_LOGOUT, USER_PROFILE, USER_PROFILE_UPDATE, USER_SIGNUP } from "./Types";
+import {
+  GET_NOTES,
+  REQUEST,
+  USER_LOGIN,
+  USER_LOGOUT,
+  USER_PROFILE,
+  USER_PROFILE_UPDATE,
+  USER_SIGNUP,
+} from "./Types";
 
 const initialState = {
-  data: mockNotes,
+  data: [],
   user: JSON.parse(localStorage.getItem("keepUserInfo")) || null,
   error: null,
+  loading: false,
 };
 
 const config = {
@@ -21,19 +28,33 @@ export const KeepContext = createContext(initialState);
 const KeepContextProvider = ({ children }) => {
   const [userState, dispatch] = useReducer(KeepContextReducer, initialState);
 
-  const addNote = (title, content) => {
-    const newNote = {
-      id: uuid(),
-      title,
-      content,
-    };
-    dispatch({ type: ADD_NOTE, payload: newNote });
+  const addNote = async (title, content) => {
+   try {
+     dispatch({ type: REQUEST })
+      const newNote = {
+        title,
+        content,
+      };
+     
+     const { data } = await axios.post("/api/notes/new-note", newNote, config)
+     
+     dispatch({
+       type: GET_NOTES,
+       payload:data.data
+      })
+     
+   } catch (error) {
+    console.log(error.message)
+   }
   };
 
   // user login
 
   const login = async (email, password) => {
     try {
+      dispatch({
+        type: REQUEST,
+      });
       const { data } = await axios.post(
         "/api/users/login",
         { email, password },
@@ -64,6 +85,9 @@ const KeepContextProvider = ({ children }) => {
 
   const signUp = async (email, password, name) => {
     try {
+      dispatch({
+        type: REQUEST,
+      });
       const { data } = await axios.post(
         "/api/users/signup",
         { email, password, name },
@@ -90,81 +114,152 @@ const KeepContextProvider = ({ children }) => {
     }
   };
 
-  const getProfile = async () =>
-  {
+  const getProfile = async () => {
     try {
-      
-      const { data } = await axios.get("/api/users/profile", config)
+      dispatch({
+        type: REQUEST,
+      });
+      const { data } = await axios.get("/api/users/profile", config);
       dispatch({
         type: USER_PROFILE,
         payload: {
           name: data.name,
-          email:data.email
-        }
+          email: data.email,
+        },
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-
+  };
 
   // update profile
 
-   const updateProfile = async (email, password, name) => {
-     try {
-       const { data } = await axios.put(
-         "/api/users/profile",
-         { email, password, name },
-         config
-       );
+  const updateProfile = async (email, password, name) => {
+    try {
+      dispatch({
+        type: REQUEST,
+      });
+      const { data } = await axios.put(
+        "/api/users/profile",
+        { email, password, name },
+        config
+      );
 
-       dispatch({
-         type: USER_PROFILE_UPDATE,
-         payload: {
-           name: data?.name,
-           email: data?.email,
-         },
-       });
+      dispatch({
+        type: USER_PROFILE_UPDATE,
+        payload: {
+          name: data?.name,
+          email: data?.email,
+        },
+      });
 
-       localStorage.setItem(
-         "keepUserInfo",
-         JSON.stringify({
-           name: data?.name,
-           email: data?.email,
-         })
-       );
-     } catch (error) {
-       console.log(error);
-     }
-   };
+      localStorage.setItem(
+        "keepUserInfo",
+        JSON.stringify({
+          name: data?.name,
+          email: data?.email,
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // logout 
+  // logout
 
-    const logout = async () => {
-      try {
-        // dispatch({ type: REQUEST });
-        const { data } = await axios.get("/api/users/logout", config);
-        
+  const logout = async () => {
+    try {
+      // dispatch({ type: REQUEST });
+      dispatch({
+        type: REQUEST,
+      });
+      const { data } = await axios.get("/api/users/logout", config);
+
+      dispatch({
+        type: USER_LOGOUT,
+      });
+      localStorage.removeItem("keepUserInfo");
+    } catch (error) {
+      console.log("error");
+    }
+  };
+
+  //  get all the notes
+
+  const getNotes = async () => {
+    try {
+      dispatch({
+        type: REQUEST,
+      });
+      const { data } = await axios.get("/api/notes", config);
+      // console.log(data)
+      dispatch({
+        type: GET_NOTES,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  // update a note
+
+  const updateNote = async (id, { title, content, archive }) => {
+    try
+    {
+      dispatch({type:REQUEST})
+      const { data } = await axios.put(
+        `/api/notes/note/${id}`,
+        {
+          title,
+          content,
+          archive,
+        },
+        config
+      );
+
           dispatch({
-            type: USER_LOGOUT,
+            type: GET_NOTES,
+            payload: data.data,
           });
-          localStorage.removeItem("keepUserInfo");
-      } catch (error) {
-        console.log("error")
-      }
-    };
+    } catch (error)
+    {
+      console.log(error.message)
+    }
+  };
 
+
+  const deleteNote = async (id) => {
+    try {
+      dispatch({
+        type:REQUEST
+      })
+
+      const { data } = await axios.delete(`/api/notes/del-note/${ id }`, config)
+       dispatch({
+         type: GET_NOTES,
+         payload: data.data,
+       });
+      
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
   return (
     <KeepContext.Provider
       value={{
         data: userState.data,
         user: userState.user,
+        loading: userState.loading,
         addNote,
         login,
         signUp,
         logout,
         getProfile,
         updateProfile,
+        getNotes,
+        updateNote,
+        deleteNote,
       }}
     >
       {children}

@@ -1,5 +1,6 @@
 import { Divider, Grid, styled } from "@mui/material";
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { KeepContext } from "../../Context/KeepContext";
 import AllNotes from "../Notes/AllNotes";
 import TextBox from "../TextEditor/TextBox";
 
@@ -10,7 +11,17 @@ const GridContainer = styled(Grid)(({ theme }) => ({
   marginTop: "30px",
 }));
 
-const Home = () => {
+
+
+const Home = () =>
+{
+  
+    const { getNotes } = useContext(KeepContext);
+
+    useEffect(() => {
+      getNotes();
+    }, []);
+  
   return (
     <GridContainer
       container

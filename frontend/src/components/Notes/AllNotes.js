@@ -14,10 +14,19 @@ const GridContainer = styled(Grid)(({ theme }) => ({
 const AllNotes = () =>
 {
   
-  const { data } = useContext(KeepContext)
+  const { data, updateNote } = useContext(KeepContext);
   return (
     <GridContainer container spacing={2} columnGap={3} rowGap={2}>
-          {data.map(note => <SingleNote key={note.id} title={ note.title} content={note.content} />)}
+      {data.map((note) => (
+        <SingleNote
+          key={note._id}
+          id={note._id}
+          title={note.title}
+          content={note.content}
+          archive={note.archive}
+          updateNote={updateNote}
+        />
+      ))}
     </GridContainer>
   );
 }
