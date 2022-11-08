@@ -1,6 +1,6 @@
 # Keep-it 
 
- [Keep-it](https://keep-it-yourselves.herokuapp.com/).
+ Open the link to [Keep-it](https://keep-it-yourselves.herokuapp.com/).
 
 ## About
 
