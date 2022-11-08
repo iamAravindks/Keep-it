@@ -26,7 +26,7 @@ Keep-it is a web application to store your tiny notes on the go
 - `npm run dev` to run the server
 
 
-###API Docs
+### API Docs
 visit https://documenter.getpostman.com/view/13755139/2s8YehSbCb to see the api docs for the server
 
 
