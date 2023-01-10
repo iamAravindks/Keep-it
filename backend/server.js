@@ -28,16 +28,16 @@ app.get("/test-api", async(req, res) =>
 app.use("/api/users", userRouter);
 app.use("/api/notes", noteRouter)
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static(path.join(__dirname, "../frontend/build")));
-//   app.get("*", (req, res) => {
-//     const filePath = path.join(__dirname, "../frontend/build");
-//     res.sendFile(path.resolve(filePath, "index.html"));
-//   });
-// }
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/build")));
+  app.get("*", (req, res) => {
+    const filePath = path.join(__dirname, "../frontend/build");
+    res.sendFile(path.resolve(filePath, "index.html"));
+  });
+}
 
 
 app.use(notFound);
