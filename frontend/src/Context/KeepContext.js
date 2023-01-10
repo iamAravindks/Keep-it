@@ -2,8 +2,10 @@ import { createContext, useReducer } from "react";
 import axios from "axios";
 import KeepContextReducer from "./KeepContextReducer";
 import {
+  CLEAR_ERROR,
   GET_NOTES,
   REQUEST,
+  SET_ERROR,
   USER_LOGIN,
   USER_LOGOUT,
   USER_PROFILE,
@@ -28,6 +30,10 @@ export const KeepContext = createContext(initialState);
 const KeepContextProvider = ({ children }) => {
   const [userState, dispatch] = useReducer(KeepContextReducer, initialState);
 
+  const setError = (error) => {
+    dispatch({ type: SET_ERROR, payload: error });
+setTimeout(() => dispatch({ type: CLEAR_ERROR }), 3000);
+  };
   const addNote = async (title, content) => {
     try {
       dispatch({ type: REQUEST });
@@ -43,7 +49,11 @@ const KeepContextProvider = ({ children }) => {
         payload: data.data,
       });
     } catch (error) {
-      console.log(error.message);
+            setError(
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+            );
     }
   };
 
@@ -76,7 +86,10 @@ const KeepContextProvider = ({ children }) => {
         })
       );
     } catch (error) {
-      console.log(error);
+      setError(error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message);
+      
     }
   };
 
@@ -109,7 +122,11 @@ const KeepContextProvider = ({ children }) => {
         })
       );
     } catch (error) {
-      console.log(error);
+            setError(
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+            );
     }
   };
 
@@ -127,7 +144,11 @@ const KeepContextProvider = ({ children }) => {
         },
       });
     } catch (error) {
-      console.log(error);
+            setError(
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+            );
     }
   };
 
@@ -160,7 +181,11 @@ const KeepContextProvider = ({ children }) => {
         })
       );
     } catch (error) {
-      console.log(error);
+           setError(
+             error.response && error.response.data.message
+               ? error.response.data.message
+               : error.message
+           );
     }
   };
 
@@ -179,7 +204,11 @@ const KeepContextProvider = ({ children }) => {
       });
       localStorage.removeItem("keepUserInfo");
     } catch (error) {
-      console.log("error");
+            setError(
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+            );
     }
   };
 
@@ -197,7 +226,11 @@ const KeepContextProvider = ({ children }) => {
         payload: data.data,
       });
     } catch (error) {
-      console.log(error.message);
+            setError(
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+            );
     }
   };
 
@@ -222,7 +255,11 @@ const KeepContextProvider = ({ children }) => {
         payload: data.data,
       });
     } catch (error) {
-      console.log(error.message);
+            setError(
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+            );
     }
   };
 
@@ -238,16 +275,18 @@ const KeepContextProvider = ({ children }) => {
         payload: data.data,
       });
     } catch (error) {
-      console.log(error.message);
+            setError(
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+            );
     }
   };
 
-  const searchNote = (note) =>
-  {
-    if (note.length === 0)
-    {
-      getNotes()
-      return
+  const searchNote = (note) => {
+    if (note.length === 0) {
+      getNotes();
+      return;
     }
     const filterDatas = userState.data.filter((n) => n.title.includes(note));
 
@@ -262,6 +301,7 @@ const KeepContextProvider = ({ children }) => {
         data: userState.data,
         user: userState.user,
         loading: userState.loading,
+        error: userState.error,
         addNote,
         login,
         signUp,
@@ -271,7 +311,7 @@ const KeepContextProvider = ({ children }) => {
         getNotes,
         updateNote,
         deleteNote,
-        searchNote
+        searchNote,
       }}
     >
       {children}

@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { KeepContext } from "../../Context/KeepContext";
+import NoNotes from "../NoNotes";
 import SingleNote from "./SingleNote";
 
 const GridContainer = styled(Grid)(({ theme }) => ({
@@ -14,7 +16,25 @@ const GridContainer = styled(Grid)(({ theme }) => ({
 }));
 
 const ArchiveNotes = () => {
-  const { data, updateNote } = useContext(KeepContext);
+  const { data, updateNote, getNotes } = useContext(KeepContext);
+  useEffect(() => {
+    getNotes();
+  }, []);
+
+  const isNote = data.filter((d) => d.archive === true) 
+  
+    if (isNote.length===0 || data.length===0) {
+      return (
+        <GridContainer container spacing={2} columnGap={3} rowGap={2}>
+          <NoNotes>
+            Not Note found,check the{" "}
+            <Link to="/" style={{ color: "#eee" }}>
+              Home
+            </Link>
+          </NoNotes>
+        </GridContainer>
+      );
+    }
 
   return (
     <GridContainer container spacing={2} columnGap={3} rowGap={2}>

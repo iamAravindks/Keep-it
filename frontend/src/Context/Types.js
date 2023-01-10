@@ -13,6 +13,8 @@ export const NOTE_FAIL = "NOTE_FAIL";
 
 export const USER_AUTH_FAIL = "USER_AUTH_FAIL"
 
+export const SET_ERROR = "SET_ERROR"
+export const CLEAR_ERROR = "CLEAR_ERROR"
 
 
 

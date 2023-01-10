@@ -1,6 +1,7 @@
 import { Divider, Grid, styled } from "@mui/material";
 import React, { useContext, useEffect } from 'react'
 import { KeepContext } from "../../Context/KeepContext";
+import NoNotes from "../NoNotes";
 import AllNotes from "../Notes/AllNotes";
 import TextBox from "../TextEditor/TextBox";
 
@@ -31,6 +32,7 @@ const Home = () =>
     >
       <TextBox />
       <Divider />
+      
       <AllNotes />
     </GridContainer>
   );

@@ -13,38 +13,36 @@ import { SignUp } from "./components/Signup/SignUp";
 import Profile from "./components/Profile/Profile";
 import Loader from "./components/Loader";
 import ArchiveNotes from "./components/Notes/ArchiveNotes";
+import { useContext } from "react";
+import { KeepContext } from "./Context/KeepContext";
+import { AlertBox } from "./components/Alert";
 
-
-
-
-const Layout = () =>
-{
+const Layout = () => {
   return (
     <>
       <NavBar />
-      <Outlet/>
+      <Outlet />
     </>
-  )
-}
+  );
+};
 
-const App = () =>
-{
+const App = () => {
+  const context = useContext(KeepContext);
 
-
-  
+  console.log(context.error);
 
   return (
     <>
-      <Loader/>
+      {context.error && <AlertBox>{context.error}</AlertBox>}
+      <Loader />
       <Container>
-       
         <Router>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route element={<PrivateRouteWrapper />}>
                 <Route index element={<Home />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route path="/archive" element={<ArchiveNotes/>}/>
+                <Route path="/archive" element={<ArchiveNotes />} />
               </Route>
             </Route>
             <Route path="/login" element={<Login />} />
