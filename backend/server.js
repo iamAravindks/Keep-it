@@ -44,3 +44,5 @@ connectDB()
 
 app.listen(PORT_LISTEN, () => console.log(`server listens on http://localhost:${ PORT_LISTEN }`))
 
+module.exports = app
+
